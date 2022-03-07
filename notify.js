@@ -1,5 +1,5 @@
 import pgwire from "pgwire";
-import { api } from "./common.js";
+import common from "./common.js";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -15,7 +15,7 @@ export const client = await pgwire.connect({
 });
 client.on("notification", ({ channel, payload }) => {
   try {
-    api.post(`wal/index?index=${channel}`, JSON.parse(payload));
+    common.api.post(`wal/index?index=${channel}`, JSON.parse(payload));
   } catch (error) {
     console.log(error.message);
   }

@@ -1,6 +1,6 @@
 import pgwire from "pgwire";
 import _ from "lodash";
-import { api } from "./common.js";
+import common from "./common.js";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -30,7 +30,7 @@ try {
         return [column, chunk[index]];
       })
     );
-    await api.post(`wal/index?index=${channel}`, data);
+    await common.api.post(`wal/index?index=${channel}`, data);
   }
 } catch (error) {
 } finally {
