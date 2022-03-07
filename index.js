@@ -12,7 +12,7 @@ export const api = axios.create({
 const client = await pgwire.connect(
   {
     user: process.env.PG_USER,
-    // password: process.env.PG_PASSWORD,
+    password: process.env.PG_PASSWORD,
     hostname: process.env.PG_HOST,
     port: process.env.PG_PORT,
     database: process.env.PG_DATABASE,
