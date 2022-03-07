@@ -1,5 +1,5 @@
 import pgwire from "pgwire";
-import * as common from "./common";
+import * as common from "./common.js";
 import * as dotenv from "dotenv";
 
 dotenv.config();
