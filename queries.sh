@@ -1,1 +1,6 @@
-organisationunitid,uid,code,created,lastupdated,lastupdatedby,name,shortname,parentid,path,hierarchylevel,description,openingdate,closeddate,comment,url,contactperson,address,email,phonenumber,userid,translations,attributevalues
+pm2 start backlog.js --no-autorestart --name "ous" -- "select organisationunitid,uid,code,created,lastupdated,lastupdatedby,name,shortname,parentid,path,hierarchylevel,description,openingdate,closeddate,comment,url,contactperson,address,email,phonenumber,userid,translations,attributevalues from organisationunit;" "organisationunitid,uid,code,created,lastupdated,lastupdatedby,name,shortname,parentid,path,hierarchylevel,description,openingdate,closeddate,comment,url,contactperson,address,email,phonenumber,userid,translations,attributevalues" "organisationunit"
+
+
+
+
+node backlog.js "select organisationunitid::text,uid,code,created,lastupdated,lastupdatedby::text,name,shortname,parentid::text,path,hierarchylevel,description,openingdate,closeddate,comment,url,contactperson,address,email,phonenumber,userid::text,translations,attributevalues from organisationunit;" "organisationunitid,uid,code,created,lastupdated,lastupdatedby,name,shortname,parentid,path,hierarchylevel,description,openingdate,closeddate,comment,url,contactperson,address,email,phonenumber,userid,translations,attributevalues" "organisationunit"
