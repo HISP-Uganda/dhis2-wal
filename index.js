@@ -4,8 +4,9 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const wall = axios.create({
-  baseURL: "http://localhost:3001/",
+export const api = axios.create({
+  // baseURL: "http://localhost:3001/",
+  baseURL: "https://services.dhis2.hispuganda.org/",
 });
 
 const client = await pgwire.connect(
@@ -40,7 +41,7 @@ try {
           after,
         } = pgoMessage;
         try {
-          await wall.post(`wal/index?index=${name}`, after);
+          await api.post(`wal/index?index=${name}`, after);
           replicationStream.ack(pgoMessage.lsn);
         } catch (error) {
           console.log(error.message);
