@@ -30,10 +30,11 @@ try {
         return [column, chunk[index]];
       })
     );
-    console.log(data, channel, columns);
-    // await common.api.post(`wal/index?index=${channel}`, data);
+    await common.api.post(`wal/index?index=${channel}`, data);
+    console.log("Pushed");
   }
 } catch (error) {
+  console.log(error.message);
 } finally {
   client.end();
 }
