@@ -24,7 +24,6 @@ lodash@^4.17.21:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
-pgwire@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/pgwire/-/pgwire-0.6.0.tgz#f24b431d1ae46584af44457a4ff4253e7818582c"
-  integrity sha512-3H1gb4iXaqPKxt7w0WX2pqoqliLkyF2RUGI/Y3JHD9Q3i7at7TeE1rbjG9nuui6V1mmv1SQlpjHlCiEJCmvx7A==
+"pgwire@https://github.com/kagis/pgwire/archive/72b8f43ec25ba58a31f0c3e82862bf122f92df9c.tar.gz":
+  version "0.7.0"
+  resolved "https://github.com/kagis/pgwire/archive/72b8f43ec25ba58a31f0c3e82862bf122f92df9c.tar.gz#1a68a22ebd8c490dfb2ce82e2cdcc6560c85af5c"
