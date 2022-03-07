@@ -1,5 +1,5 @@
 import pgwire from "pgwire";
-import { api } from "./common";
+import * as common from "./common";
 import * as dotenv from "dotenv";
 
 dotenv.config();
