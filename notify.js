@@ -4,6 +4,8 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
+const args = process.argv.slice(2);
+
 export const client = await pgwire.connect({
   user: process.env.PG_USER,
   password: process.env.PG_PASSWORD,
@@ -18,4 +20,4 @@ client.on("notification", ({ channel, payload }) => {
     console.log(error.message);
   }
 });
-await client.query(`LISTEN foo`);
+await client.query(`LISTEN ${args[0]}`);
