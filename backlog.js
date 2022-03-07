@@ -1,6 +1,6 @@
 import pgwire from "pgwire";
 import _ from "lodash";
-import { api } from "./common";
+import { api } from "./common.js";
 import * as dotenv from "dotenv";
 
 dotenv.config();
