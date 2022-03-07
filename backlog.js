@@ -1,5 +1,5 @@
 import pgwire from "pgwire";
-import { fromPairs } from "lodash";
+import _ from "lodash";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -24,7 +24,7 @@ try {
       continue;
     }
     const columns = String(args[1]).split(",");
-    const data = fromPairs(
+    const data = _.fromPairs(
       columns.map((column, index) => {
         return [column, chunk[index]];
       })
