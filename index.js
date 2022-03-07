@@ -1,13 +1,8 @@
 import pgwire from "pgwire";
-import axios from "axios";
+import { api } from './common'
 import * as dotenv from "dotenv";
 
 dotenv.config();
-
-export const api = axios.create({
-  // baseURL: "http://localhost:3001/",
-  baseURL: "https://services.dhis2.hispuganda.org/",
-});
 
 const client = await pgwire.connect(
   {
