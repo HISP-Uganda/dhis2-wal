@@ -1,5 +1,5 @@
 import pgwire from "pgwire";
-import { api } from './common'
+import { api } from "./common";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -36,8 +36,9 @@ try {
           after,
         } = pgoMessage;
         try {
-          await api.post(`wal/index?index=${name}`, after);
-          replicationStream.ack(pgoMessage.lsn);
+          // await api.post(`wal/index?index=${name}`, after);
+          console.log(after);
+          // replicationStream.ack(pgoMessage.lsn);
         } catch (error) {
           console.log(error.message);
         }
