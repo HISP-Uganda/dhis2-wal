@@ -24,7 +24,8 @@ try {
         })
       );
     });
-    await common.api.post(`wal/index?index=${args[1]}`, data);
+    const response = await common.api.post(`wal/index?index=${args[1]}`, data);
+    console.log(response);
   }
 } catch (error) {
   console.log(error.message);
