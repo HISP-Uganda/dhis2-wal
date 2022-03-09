@@ -38,7 +38,8 @@ try {
     const data = messages
       .filter(({ tag }) => ["update", "insert"].indexOf(tag) !== -1)
       .map(({ after }) => {
-        return { ...after };
+        const { geometry, ...others } = after;
+        return others;
       });
     try {
       await common.api.post(`wal/index?index=${args[0]}`, {
