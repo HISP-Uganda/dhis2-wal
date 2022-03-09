@@ -33,7 +33,6 @@ try {
       });
     }
     console.log(`Finished working on ${i}`);
-    i = i + 1;
   }
 } catch (error) {
   console.log(error.message);
