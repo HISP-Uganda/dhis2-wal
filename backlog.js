@@ -15,10 +15,10 @@ export const client = await pgwire.pgconnect({
 });
 const limit = 10000;
 try {
-  for (const i = 0; i <= 683; i++) {
+  for (let i = 0; i <= 683; i++) {
     console.log(`Working on ${i + 1}`);
     const { results } = await client.query(
-      `${args[0]} limit ${limit} offset ${i * limit}`
+      `${args[0]} limit ${limit} offset ${i * limit};`
     );
     for (const { rows, columns } of results) {
       const data = rows.map((r) => {
