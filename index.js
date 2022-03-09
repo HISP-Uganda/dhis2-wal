@@ -40,11 +40,15 @@ try {
       .map(({ after }) => {
         return { ...after };
       });
-    await common.api.post(`wal/index?index=${args[0]}`, {
-      data,
-      index: args[0],
-    });
-    replicationStream.ack(lastLsn);
+    try {
+      await common.api.post(`wal/index?index=${args[0]}`, {
+        data,
+        index: args[0],
+      });
+      replicationStream.ack(lastLsn);
+    } catch (error) {
+      console.log(error.message);
+    }
     // if (lastLsn >= stopLsn) {
     //   break;
     // }
