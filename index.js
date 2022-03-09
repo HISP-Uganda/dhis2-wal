@@ -1,10 +1,12 @@
-import pgwire from "pgwire";
+import * as pgwire from "pgwire";
 import * as common from "./common.js";
 import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const client = await pgwire.connect(
+const args = process.argv.slice(2);
+
+const conn = await pgwire.pgconnect(
   {
     user: process.env.PG_USER,
     password: process.env.PG_PASSWORD,
@@ -16,34 +18,37 @@ const client = await pgwire.connect(
     replication: "database",
   }
 );
-
+let organisationUnits = {};
 try {
-  const replicationStream = await client.logicalReplication({
-    slot: "elasticsearch_slot",
+  // const [stopLsn] = await conn.query(`select pg_current_wal_lsn()`);
+  // if (args[0] !== "organisationunit") {
+  //   const data = await common.api.post(`wal/index?index=${channel}`, data);
+  // }
+  const replicationStream = conn.logicalReplication({
+    slot: `${args[0]}_slot`,
     startLsn: "0/0",
     options: {
       proto_version: 1,
-      publication_names: "elasticsearch_pub",
+      publication_names: `${args[0]}_pub`,
+      messages: "true",
     },
   });
-  process.on("SIGINT", (_) => replicationStream.destroy());
-  for await (const pgoMessage of replicationStream.pgoutput()) {
-    switch (pgoMessage.tag) {
-      case "insert":
-      case "update":
-        const {
-          relation: { name },
-          after,
-        } = pgoMessage;
-        try {
-          // await api.post(`wal/index?index=${name}`, after);
-          console.log(after);
-          // replicationStream.ack(pgoMessage.lsn);
-        } catch (error) {
-          console.log(error.message);
-        }
-    }
+  for await (const chunk of replicationStream.pgoutputDecode()) {
+    const { messages, lastLsn } = chunk;
+    const data = messages
+      .filter(({ tag }) => ["update", "insert"].indexOf(tag) !== -1)
+      .map(({ after }) => {
+        return { ...after };
+      });
+    await common.api.post(`wal/index?index=${args[0]}`, {
+      data,
+      index: args[0],
+    });
+    replicationStream.ack(lastLsn);
+    // if (lastLsn >= stopLsn) {
+    //   break;
+    // }
   }
 } finally {
-  client.end();
+  conn.end();
 }
