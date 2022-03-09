@@ -1,10 +1,16 @@
 import * as pgwire from "pgwire";
-import _ from "lodash";
+import _, { fromPairs } from "lodash";
 import * as common from "./common.js";
 import * as dotenv from "dotenv";
 
 dotenv.config();
-
+const hirarchy = {
+  0: "national",
+  1: "region",
+  2: "district",
+  3: "subcounty",
+  4: "facility",
+};
 const args = process.argv.slice(2);
 export const client = await pgwire.pgconnect({
   user: process.env.PG_USER,
@@ -24,6 +30,19 @@ try {
       const data = rows.map((r) => {
         return _.fromPairs(
           columns.map(({ name }, index) => {
+            if (name === "path") {
+              return [
+                name,
+                fromPairs(
+                  String(r[index])
+                    .split("/")
+                    .slice(1)
+                    .map((x, i) => {
+                      return [hirarchy[i] || "other", x];
+                    })
+                ),
+              ];
+            }
             return [name, r[index]];
           })
         );
