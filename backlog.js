@@ -24,7 +24,7 @@ try {
         })
       );
     });
-    await common.api.post(`wal/index?index=${args[2]}`, data);
+    await common.api.post(`wal/index?index=${args[1]}`, data);
   }
 } catch (error) {
   console.log(error.message);
