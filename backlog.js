@@ -1,5 +1,5 @@
 import * as pgwire from "pgwire";
-import _, { fromPairs } from "lodash";
+import _ from "lodash";
 import * as common from "./common.js";
 import * as dotenv from "dotenv";
 
@@ -33,7 +33,7 @@ try {
             if (name === "path") {
               return [
                 name,
-                fromPairs(
+                _.fromPairs(
                   String(r[index])
                     .split("/")
                     .slice(1)
