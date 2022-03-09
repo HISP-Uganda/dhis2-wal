@@ -42,11 +42,12 @@ try {
         return others;
       });
     try {
-      await common.api.post(`wal/index?index=${args[0]}`, {
-        data,
-        index: args[0],
-      });
-      replicationStream.ack(lastLsn);
+      // await common.api.post(`wal/index?index=${args[0]}`, {
+      //   data,
+      //   index: args[0],
+      // });
+      console.log(data);
+      // replicationStream.ack(lastLsn);
     } catch (error) {
       console.log(error.message);
     }
