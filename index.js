@@ -30,7 +30,7 @@ try {
     options: {
       proto_version: 1,
       publication_names: `${args[0]}_pub`,
-      messages: "true",
+      // messages: "true",
     },
   });
   for await (const chunk of replicationStream.pgoutputDecode()) {
