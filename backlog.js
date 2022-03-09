@@ -13,21 +13,30 @@ export const client = await pgwire.pgconnect({
   port: process.env.PG_PORT,
   database: process.env.PG_DATABASE,
 });
-
+const limit = 10000;
 try {
-  const { results } = await client.query(`${args[0]}`);
-  for (const { rows, columns } of results) {
-    const data = rows.map((r) => {
-      return _.fromPairs(
-        columns.map(({ name }, index) => {
-          return [name, r[index]];
-        })
+  for (const i = 0; i <= 683; i++) {
+    console.log(`Working on ${i + 1}`);
+    const { results } = await client.query(
+      `${args[0]} limit ${limit} offset ${i * limit}`
+    );
+    for (const { rows, columns } of results) {
+      const data = rows.map((r) => {
+        return _.fromPairs(
+          columns.map(({ name }, index) => {
+            return [name, r[index]];
+          })
+        );
+      });
+      const { data: vals } = await common.api.post(
+        `wal/index?index=${args[1]}`,
+        {
+          data,
+        }
       );
-    });
-    const {data:vals} = await common.api.post(`wal/index?index=${args[1]}`, {
-      data,
-    });
-    console.log(vals);
+    }
+    console.log(`Finished working on ${i + 1}`);
+    i = i + 1;
   }
 } catch (error) {
   console.log(error.message);
