@@ -46,7 +46,7 @@ try {
       //   data,
       //   index: args[0],
       // });
-      console.log(data);
+      console.log(messages);
       // replicationStream.ack(lastLsn);
     } catch (error) {
       console.log(error.message);
