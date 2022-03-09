@@ -24,10 +24,10 @@ try {
         })
       );
     });
-    const response = await common.api.post(`wal/index?index=${args[1]}`, {
+    const {data:vals} = await common.api.post(`wal/index?index=${args[1]}`, {
       data,
     });
-    console.log(response);
+    console.log(vals);
   }
 } catch (error) {
   console.log(error.message);
