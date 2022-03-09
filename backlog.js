@@ -16,8 +16,7 @@ export const client = await pgwire.pgconnect({
 const limit = 10000;
 try {
   for (let i = 0; i <= 683; i++) {
-    const current = i + 1;
-    console.log(`Working on ${current}`);
+    console.log(`Working on ${i}`);
     const { results } = await client.query(
       `${args[0]} limit ${limit} offset ${i * limit};`
     );
@@ -33,7 +32,7 @@ try {
         data,
       });
     }
-    console.log(`Finished working on ${current}`);
+    console.log(`Finished working on ${i}`);
     i = i + 1;
   }
 } catch (error) {
