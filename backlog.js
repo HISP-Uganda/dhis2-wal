@@ -28,7 +28,7 @@ try {
           })
         );
       });
-      const { data: vals } = await common.api.post(
+      await common.api.post(
         `wal/index?index=${args[1]}`,
         {
           data,
