@@ -53,7 +53,7 @@ try {
     });
 
     const all = _.chunk(data, 10000).map((chunk) => {
-      return common.api.post(`wal/index?index=${args[2]}`, {
+      return common.api.post(`wal/index?index=${args[0]}`, {
         data: chunk,
       });
     });
