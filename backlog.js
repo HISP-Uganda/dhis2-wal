@@ -63,11 +63,11 @@ try {
           })
         );
       });
-      const { data: dt } = await common.api.post(`wal/index?index=${args[2]}`, {
-        data,
-      });
+      // const { data: dt } = await common.api.post(`wal/index?index=${args[2]}`, {
+      //   data,
+      // });
 
-      console.log(dt);
+      // console.log(dt);
 
     }
     console.log(`Finished working on ${start}`);
