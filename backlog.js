@@ -63,6 +63,7 @@ try {
           })
         );
       });
+      console.log(data.length);
       // const { data: dt } = await common.api.post(`wal/index?index=${args[2]}`, {
       //   data,
       // });
