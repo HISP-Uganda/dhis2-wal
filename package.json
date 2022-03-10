@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.26.0",
+    "date-fns": "^2.28.0",
     "dotenv": "^16.0.0",
     "lodash": "^4.17.21",
     "pgwire": "https://github.com/kagis/pgwire/archive/72b8f43ec25ba58a31f0c3e82862bf122f92df9c.tar.gz"
