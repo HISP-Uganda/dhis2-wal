@@ -63,13 +63,13 @@ try {
           })
         );
       });
-      console.log(data.length);
-      // const { data: dt } = await common.api.post(`wal/index?index=${args[2]}`, {
-      //   data,
-      // });
 
-      // console.log(dt);
-
+      const all = _.chunk(data, 20000).map((chunk) => {
+        return common.api.post(`wal/index?index=${args[2]}`, {
+          data: chunk,
+        });
+      });
+      await Promise.all(all);
     }
     console.log(`Finished working on ${start}`);
   }
