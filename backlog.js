@@ -69,7 +69,8 @@ try {
           data: chunk,
         });
       });
-      await Promise.all(all);
+      const response = await Promise.all(all);
+      console.log(response);
     }
     console.log(`Finished working on ${start}`);
   }
