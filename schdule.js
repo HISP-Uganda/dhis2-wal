@@ -29,6 +29,7 @@ cron.schedule("*/5 * * * *", async () => {
     const hours = df.subMinutes(current, 5);
     const end = df.format(current, "yyyy-MM-dd HH:mm:ss.SSS");
     const start = df.format(hours, "yyyy-MM-dd HH:mm:ss.SSS");
+    console.log(`Working on ${start}  to ${end}`);
     const { results } = await client.query(
       `select o.uid ou,o.name,o.path,psi.programstageinstanceid::text,psi.uid,to_char(psi.created,'YYYY-MM-DD') created,to_char(psi.created,'MM') m,to_char(psi.lastupdated,'YYYY-MM-DD') lastupdated,programinstanceid::text,programstageid::text,attributeoptioncomboid::text,psi.deleted,psi.storedby,to_char(duedate,'YYYY-MM-DD') duedate,to_char(executiondate,'YYYY-MM-DD') executiondate,psi.organisationunitid::text,status,completedby,to_char(completeddate,'YYYY-MM-DD') completeddate,eventdatavalues->'bbnyNYD1wgS'->>'value' as vaccine,eventdatavalues->'LUIsbsm3okG'->>'value' as dose,assigneduserid::text,psi.createdbyuserinfo,psi.lastupdatedbyuserinfo from programstageinstance psi inner join organisationunit o using(organisationunitid) where psi.created >= '${start}' and psi.created < '${end}' and programstageid = 12715`
     );
@@ -65,7 +66,5 @@ cron.schedule("*/5 * * * *", async () => {
     console.log(`Finished working on ${start} and ${end}`);
   } catch (error) {
     console.log(error.message);
-  } finally {
-    client.end();
   }
 });
