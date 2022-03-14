@@ -23,7 +23,7 @@ export const client = await pgwire.pgconnect({
   database: process.env.PG_DATABASE,
 });
 
-cron.schedule("*/5 * * * *", () => {
+cron.schedule("*/5 * * * *", async () => {
   try {
     const current = new Date();
     const hours = df.subMinutes(current, 5);
