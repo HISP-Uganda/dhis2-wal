@@ -23,10 +23,6 @@ module.exports.query = `select
       pi.created,
       'lastupdated',
       pi.lastupdated,
-      'createdatclient',
-      pi.createdatclient,
-      'lastupdatedatclient',
-      pi.lastupdatedatclient,
       'incidentdate',
       pi.incidentdate,
       'enrollmentdate',
@@ -57,8 +53,6 @@ module.exports.query = `select
       psi.duedate,
       'executiondate',
       psi.executiondate,
-      'organisationunitid',
-      psi.organisationunitid,
       'status',
       psi.status,
       'completedby',
@@ -71,24 +65,16 @@ module.exports.query = `select
     jsonb_build_object(
       'uid',
       tei.uid,
-      'code',
-      tei.code,
       'created',
       tei.created,
       'lastupdated',
       tei.lastupdated,
       'lastupdatedby',
       tei.lastupdatedby,
-      'createdatclient',
-      tei.createdatclient,
-      'lastupdatedatclient',
-      tei.lastupdatedatclient,
       'inactive',
       tei.inactive,
       'deleted',
-      tei.deleted,
-      'lastsynchronized',
-      tei.lastsynchronized
+      tei.deleted
     )
   ) as dt
 from programstageinstance psi

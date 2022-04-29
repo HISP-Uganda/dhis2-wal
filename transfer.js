@@ -19,9 +19,9 @@ const pool = new Pool({
   port: 5432,
 });
 
-const batchSize = 1;
+const batchSize = 1000;
 
-const processAndInsert = (rows) => {
+const processAndInsert = async (index, rows) => {
   const all = rows.map(({ id, dt, orgunit, path, regorgunit, regpath }) => {
     const eventOrgUnit = _.fromPairs(
       String(path)
@@ -46,28 +46,23 @@ const processAndInsert = (rows) => {
       tei: { ...dt.tei, ...registrationOrgUnit, regorgunit },
     };
   });
-  console.log(all);
+  const { data } = await api.post(`wal/index?index=${index}`, {
+    data: all,
+  });
+  console.log(data);
 };
 
 const transferAll = async (index, q) => {
   const client = await pool.connect();
   const cursor = client.query(new Cursor(q));
   let rows = await cursor.read(batchSize);
-  console.log(rows);
-  processAndInsert(rows);
-
-  // const { data } = await api.post(`wal/index?index=${index}`, {
-  //   data: rows,
-  // });
-  // while (rows.length) {
-  //   rows = await cursor.read(batchSize);
-  //   console.log(rows);
-  //   if (rows.length > 0) {
-  //     const { data } = await api.post(`wal/index?index=${index}`, {
-  //       data: rows,
-  //     });
-  //   }
-  // }
+  processAndInsert(index, rows);
+  while (rows.length) {
+    rows = await cursor.read(batchSize);
+    if (rows.length > 0) {
+      processAndInsert(index, rows);
+    }
+  }
   cursor.close(() => client.release());
 };
 
