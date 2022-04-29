@@ -19,10 +19,11 @@ const pool = new Pool({
   port: 5432,
 });
 
-const batchSize = 10;
+const batchSize = 1;
 
 const processAndInsert = (rows) => {
   const all = rows.map(({ id, dt, orgUnit, path, regOrgUnit, regPath }) => {
+    console.log(orgUnit, path, regOrgUnit, regPath);
     const eventOrgUnit = _.fromPairs(
       String(path)
         .split("/")
