@@ -9,7 +9,7 @@ module.exports.query = `select
   o.uid as orgUnit,
   o.path,
   (select ot.uid from organisationunit ot where ot.organisationunitid = tei.organisationunitid) as regOrgUnit,
-  (select ot.uid from organisationunit ot where ot.organisationunitid = tei.organisationunitid) as regPath,  
+  (select ot.path from organisationunit ot where ot.organisationunitid = tei.organisationunitid) as regPath,  
   concat(tei.uid,psi.uid) as id,
   (
     select jsonb_object_agg(tea.uid, value) AS months
