@@ -1,5 +1,6 @@
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
+const _ = require("lodash");
 const { query, api } = require("./common");
 
 // const pool = new Pool({
@@ -21,8 +22,29 @@ const pool = new Pool({
 const batchSize = 10;
 
 const processAndInsert = (rows) => {
-  const all = rows.map(({ id, dt }) => {
-    return { ...dt, id };
+  const all = rows.map(({ id, dt, orgUnit, path, regOrgUnit, regPath }) => {
+    const eventOrgUnit = _.fromPairs(
+      String(path)
+        .split("/")
+        .slice(1)
+        .map((x, i) => {
+          return [`level${i + 1}`, x];
+        })
+    );
+    const registrationOrgUnit = _.fromPairs(
+      String(regPath)
+        .split("/")
+        .slice(1)
+        .map((x, i) => {
+          return [`level${i + 1}`, x];
+        })
+    );
+    return {
+      ...dt,
+      id,
+      event: { ...dt.event, ...eventOrgUnit, orgUnit },
+      tei: { ...dt.tei, ...registrationOrgUnit, regOrgUnit },
+    };
   });
   console.log(all);
 };

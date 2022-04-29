@@ -1,11 +1,4 @@
-const axios = require("axios");
-
-module.exports.api = axios.create({
-  // baseURL: "http://localhost:3001/",
-  baseURL: "https://services.dhis2.hispuganda.org/",
-});
-
-module.exports.query = `select
+select
   o.uid as orgUnit,
   o.path,
   (select ot.uid from organisationunit ot where ot.organisationunitid = tei.organisationunitid) as regOrgUnit,
@@ -94,4 +87,4 @@ module.exports.query = `select
 from programstageinstance psi
   inner join organisationunit o using(organisationunitid)
   inner join programinstance pi using(programinstanceid)
-  inner join trackedentityinstance tei using(trackedentityinstanceid);`;
+  inner join trackedentityinstance tei using(trackedentityinstanceid) limit 10;
