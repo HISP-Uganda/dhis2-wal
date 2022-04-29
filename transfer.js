@@ -22,8 +22,7 @@ const pool = new Pool({
 const batchSize = 1;
 
 const processAndInsert = (rows) => {
-  const all = rows.map(({ id, dt, orgUnit, path, regOrgUnit, regPath }) => {
-    console.log(orgUnit, path, regOrgUnit, regPath);
+  const all = rows.map(({ id, dt, orgunit, path, regorgunit, regpath }) => {
     const eventOrgUnit = _.fromPairs(
       String(path)
         .split("/")
@@ -33,7 +32,7 @@ const processAndInsert = (rows) => {
         })
     );
     const registrationOrgUnit = _.fromPairs(
-      String(regPath)
+      String(regpath)
         .split("/")
         .slice(1)
         .map((x, i) => {
@@ -43,8 +42,8 @@ const processAndInsert = (rows) => {
     return {
       ...dt,
       id,
-      event: { ...dt.event, ...eventOrgUnit, orgUnit },
-      tei: { ...dt.tei, ...registrationOrgUnit, regOrgUnit },
+      event: { ...dt.event, ...eventOrgUnit, orgunit },
+      tei: { ...dt.tei, ...registrationOrgUnit, regorgunit },
     };
   });
   console.log(all);
