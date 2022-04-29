@@ -1,11 +1,4 @@
-const axios = require("axios");
-
-module.exports.api = axios.create({
-  // baseURL: "http://localhost:3001/",
-  baseURL: "https://services.dhis2.hispuganda.org/",
-});
-
-module.exports.query = `select
+select
   concat(tei.uid,psi.uid) as id,
   (
     select jsonb_object_agg(tea.uid, value) AS months
@@ -105,4 +98,4 @@ module.exports.query = `select
   ) as dt
 from programstageinstance psi
   inner join programinstance pi using(programinstanceid)
-  inner join trackedentityinstance tei using(trackedentityinstanceid);`;
+  inner join trackedentityinstance tei using(trackedentityinstanceid);

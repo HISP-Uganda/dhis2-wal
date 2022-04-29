@@ -1,4 +1,4 @@
-import * as pgwire from "pgwire";
+import * as pgwire from "pgwire/mod";
 import _ from "lodash";
 import * as common from "./common.js";
 import * as dotenv from "dotenv";
