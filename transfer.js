@@ -54,7 +54,7 @@ const transferAll = async (index, q) => {
   const client = await pool.connect();
   const cursor = client.query(new Cursor(q));
   let rows = await cursor.read(batchSize);
-
+  console.log(rows);
   processAndInsert(rows);
 
   // const { data } = await api.post(`wal/index?index=${index}`, {
