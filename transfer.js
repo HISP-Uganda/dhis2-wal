@@ -20,16 +20,23 @@ const pool = new Pool({
 
 const batchSize = 10;
 
+const processAndInsert = (rows) => {
+  const all = rows.map(({ id, dt }) => {
+    return { ...dt, id };
+  });
+  console.log(all);
+};
+
 const transferAll = async (index, q) => {
   const client = await pool.connect();
   const cursor = client.query(new Cursor(q));
   let rows = await cursor.read(batchSize);
 
+  processAndInsert(rows);
+
   // const { data } = await api.post(`wal/index?index=${index}`, {
   //   data: rows,
   // });
-  console.log(rows);
-
   // while (rows.length) {
   //   rows = await cursor.read(batchSize);
   //   console.log(rows);
