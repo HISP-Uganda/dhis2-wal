@@ -19,8 +19,8 @@ function getDatesInRange(startDate, endDate) {
 }
 const pool = new Pool({
   user: process.env.PG_USER,
-  password: "",
-  hostname: process.env.PG_HOST,
+  password: process.env.PG_PASSWORD,
+  host: process.env.PG_HOST,
   port: process.env.PG_PORT,
   database: process.env.PG_DATABASE,
 });

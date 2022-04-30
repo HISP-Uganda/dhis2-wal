@@ -5,8 +5,8 @@ const { query, api } = require("./common");
 
 const pool = new Pool({
   user: process.env.PG_USER,
-  password: process.env.PG_PASSWORD || "",
-  hostname: process.env.PG_HOST,
+  password: process.env.PG_PASSWORD,
+  host: process.env.PG_HOST,
   port: process.env.PG_PORT,
   database: process.env.PG_DATABASE,
 });
