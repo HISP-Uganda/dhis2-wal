@@ -3,20 +3,12 @@ const Cursor = require("pg-cursor");
 const _ = require("lodash");
 const { query, api } = require("./common");
 
-// const pool = new Pool({
-//   user: "carapai",
-//   host: "localhost",
-//   database: "cbs",
-//   password: "Baby77@Baby771",
-//   port: 5432,
-// });
-
 const pool = new Pool({
-  user: "postgres",
-  host: "172.27.1.57",
-  database: "epivac",
-  password: "",
-  port: 5432,
+  user: process.env.PG_USER,
+  password: process.env.PG_PASSWORD || "",
+  hostname: process.env.PG_HOST,
+  port: process.env.PG_PORT,
+  database: process.env.PG_DATABASE,
 });
 
 const batchSize = 1000;
