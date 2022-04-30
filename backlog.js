@@ -1,19 +1,12 @@
 const _ = require("lodash");
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
-const { api } = require("./common.js");
+const { processAndInsert } = require("./common.js");
 const dotenv = require("dotenv");
-const cron = require("node-cron");
 dotenv.config();
 
 dotenv.config();
-const hirarchy = {
-  0: "national",
-  1: "region",
-  2: "district",
-  3: "subcounty",
-  4: "facility",
-};
+
 const args = process.argv.slice(2);
 
 function getDatesInRange(startDate, endDate) {
@@ -63,6 +56,5 @@ const process = async () => {
     }
   } catch (error) {
     console.log(error.message);
-  } finally {
-  }
+  } 
 };

@@ -1,4 +1,11 @@
 const axios = require("axios");
+const hirarchy = {
+  0: "national",
+  1: "region",
+  2: "district",
+  3: "subcounty",
+  4: "facility",
+};
 
 module.exports.api = axios.create({
   // baseURL: "http://localhost:3001/",
@@ -81,3 +88,24 @@ from programstageinstance psi
   inner join organisationunit o using(organisationunitid)
   inner join programinstance pi using(programinstanceid)
   inner join trackedentityinstance tei using(trackedentityinstanceid);`;
+
+module.exports.processAndInsert = async (index, rows) => {
+  const all = rows.map(({ path, ...others }) => {
+    const units = _.fromPairs(
+      String(path)
+        .split("/")
+        .slice(1)
+        .map((x, i) => {
+          return [hirarchy[i] || "other", x];
+        })
+    );
+    return {
+      ...others,
+      ...units,
+    };
+  });
+  const { data } = await this.api.post(`wal/index?index=${index}`, {
+    data: all,
+  });
+  console.log(data);
+};

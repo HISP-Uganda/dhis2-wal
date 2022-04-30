@@ -1,17 +1,9 @@
-const _ = require("lodash");
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
-const { api } = require("./common.js");
+const { processAndInsert } = require("./common.js");
 const dotenv = require("dotenv");
 const cron = require("node-cron");
 dotenv.config();
-const hirarchy = {
-  0: "national",
-  1: "region",
-  2: "district",
-  3: "subcounty",
-  4: "facility",
-};
 
 const pool = new Pool({
   user: process.env.PG_USER,
@@ -21,27 +13,6 @@ const pool = new Pool({
   database: process.env.PG_DATABASE,
 });
 const batchSize = 1000;
-
-const processAndInsert = async (index, rows) => {
-  const all = rows.map(({ path, ...others }) => {
-    const units = _.fromPairs(
-      String(path)
-        .split("/")
-        .slice(1)
-        .map((x, i) => {
-          return [hirarchy[i] || "other", x];
-        })
-    );
-    return {
-      ...others,
-      ...units,
-    };
-  });
-  const { data } = await api.post(`wal/index?index=${index}`, {
-    data: all,
-  });
-  console.log(data);
-};
 
 cron.schedule("*/5 * * * *", async () => {
   const client = await pool.connect();
