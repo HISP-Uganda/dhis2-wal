@@ -1,4 +1,6 @@
 const axios = require("axios");
+const _ = require("lodash");
+
 const hirarchy = {
   0: "national",
   1: "region",
@@ -109,6 +111,5 @@ module.exports.processAndInsert = async (index, rows) => {
   });
   console.log(data);
 };
-
 
 module.exports.batchSize = 1000;
