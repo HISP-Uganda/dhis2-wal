@@ -116,4 +116,4 @@ module.exports.processAndInsert = async (index, rows) => {
   }
 };
 
-module.exports.batchSize = 1000;
+module.exports.batchSize = 10000;
