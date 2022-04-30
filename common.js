@@ -103,7 +103,7 @@ module.exports.processAndInsert = async (index, rows) => {
     );
     return {
       ...others,
-      ...units,
+      path: units,
     };
   });
   const { data } = await this.api.post(`wal/index?index=${index}`, {
