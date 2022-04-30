@@ -32,8 +32,8 @@ const processData = async () => {
       df.format(df.addDays(d, 1), "yyyy-MM-dd"),
     ]);
   try {
+    const client = await pool.connect();
     for (const [start, end] of dates) {
-      const client = await pool.connect();
       console.log(`Working on ${start} to ${end}`);
       const cursor = client.query(
         new Cursor(
@@ -50,10 +50,11 @@ const processData = async () => {
         }
       }
       console.log(`Finished working on ${start} to ${end}`);
-      client.release();
     }
   } catch (error) {
     console.log(error.message);
+  } finally {
+    client.release();
   }
 };
 processData().then(() => console.log("Done"));
