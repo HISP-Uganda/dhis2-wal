@@ -24,7 +24,7 @@ const pool = new Pool({
   database: process.env.PG_DATABASE,
 });
 
-const process = async () => {
+const processData = async () => {
   const dates = getDatesInRange(new Date(args[0]), new Date(args[1]))
     .sort(df.compareAsc)
     .map((d) => [
@@ -54,5 +54,6 @@ const process = async () => {
     }
   } catch (error) {
     console.log(error.message);
-  } 
+  }
 };
+processData().then(() => console.log("Done"));
