@@ -109,3 +109,6 @@ module.exports.processAndInsert = async (index, rows) => {
   });
   console.log(data);
 };
+
+
+module.exports.batchSize = 1000;

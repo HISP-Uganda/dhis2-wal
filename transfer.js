@@ -1,7 +1,7 @@
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
 const _ = require("lodash");
-const { query, api } = require("./common");
+const { query, api,batchSize } = require("./common");
 
 const pool = new Pool({
   user: process.env.PG_USER,
@@ -11,7 +11,6 @@ const pool = new Pool({
   database: process.env.PG_DATABASE,
 });
 
-const batchSize = 1000;
 
 const processAndInsert = async (index, rows) => {
   const all = rows.map(({ id, dt, orgunit, path, regorgunit, regpath }) => {

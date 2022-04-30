@@ -1,6 +1,6 @@
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
-const { processAndInsert } = require("./common.js");
+const { processAndInsert, batchSize } = require("./common.js");
 const dotenv = require("dotenv");
 const cron = require("node-cron");
 dotenv.config();
@@ -12,7 +12,6 @@ const pool = new Pool({
   port: process.env.PG_PORT,
   database: process.env.PG_DATABASE,
 });
-const batchSize = 1000;
 
 cron.schedule("*/5 * * * *", async () => {
   const client = await pool.connect();
