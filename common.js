@@ -106,11 +106,14 @@ module.exports.processAndInsert = async (index, rows) => {
       path: units,
     };
   });
-  console.log(all);
-  const { data } = await this.api.post(`wal/index?index=${index}`, {
-    data: all,
-  });
-  console.log(data);
+  try {
+    const { data } = await this.api.post(`wal/index?index=${index}`, {
+      data: all,
+    });
+    console.log(data);
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 module.exports.batchSize = 1000;
