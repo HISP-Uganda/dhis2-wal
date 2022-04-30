@@ -22,11 +22,11 @@ cron.schedule("*/5 * * * *", async () => {
       )
     );
     let rows = await cursor.read(batchSize);
-    processAndInsert("programinstance", rows);
+    processAndInsert("programstageinstance", rows);
     while (rows.length) {
       rows = await cursor.read(batchSize);
       if (rows.length > 0) {
-        processAndInsert("programinstance", rows);
+        processAndInsert("programstageinstance", rows);
       }
     }
   } catch (error) {

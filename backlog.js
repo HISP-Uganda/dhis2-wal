@@ -42,11 +42,11 @@ const processData = async () => {
       );
 
       let rows = await cursor.read(batchSize);
-      processAndInsert("programinstance", rows);
+      processAndInsert("programstageinstance", rows);
       while (rows.length) {
         rows = await cursor.read(batchSize);
         if (rows.length > 0) {
-          processAndInsert("programinstance", rows);
+          processAndInsert("programstageinstance", rows);
         }
       }
       console.log(`Finished working on ${start} to ${end}`);
