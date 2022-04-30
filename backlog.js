@@ -31,8 +31,8 @@ const processData = async () => {
       df.format(d, "yyyy-MM-dd"),
       df.format(df.addDays(d, 1), "yyyy-MM-dd"),
     ]);
+  const client = await pool.connect();
   try {
-    const client = await pool.connect();
     for (const [start, end] of dates) {
       console.log(`Working on ${start} to ${end}`);
       const cursor = client.query(
@@ -42,11 +42,11 @@ const processData = async () => {
       );
 
       let rows = await cursor.read(batchSize);
-      processAndInsert("programstageinstance", rows);
+      await processAndInsert("programstageinstance", rows);
       while (rows.length) {
         rows = await cursor.read(batchSize);
         if (rows.length > 0) {
-          processAndInsert("programstageinstance", rows);
+          await processAndInsert("programstageinstance", rows);
         }
       }
       console.log(`Finished working on ${start} to ${end}`);
