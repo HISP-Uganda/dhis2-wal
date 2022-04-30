@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
+const df = require("date-fns");
 const { processAndInsert } = require("./common.js");
 const dotenv = require("dotenv");
 dotenv.config();
