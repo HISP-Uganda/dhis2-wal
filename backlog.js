@@ -49,7 +49,7 @@ const processData = async () => {
           processAndInsert("programinstance", rows);
         }
       }
-      console.log(`Finished working on ${start} to ${finish}`);
+      console.log(`Finished working on ${start} to ${end}`);
       client.release();
     }
   } catch (error) {
