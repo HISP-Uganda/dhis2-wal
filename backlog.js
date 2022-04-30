@@ -5,8 +5,6 @@ const { processAndInsert } = require("./common.js");
 const dotenv = require("dotenv");
 dotenv.config();
 
-dotenv.config();
-
 const args = process.argv.slice(2);
 
 function getDatesInRange(startDate, endDate) {
