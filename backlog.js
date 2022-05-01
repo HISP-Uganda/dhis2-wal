@@ -34,7 +34,7 @@ const processData = async () => {
   const client = await pool.connect();
   try {
     for (const [start, end] of dates) {
-      console.log(`Working on ${start} to ${end}`);
+      console.log(`Working on ${start}`);
       const cursor = client.query(
         new Cursor(
           `select o.uid ou,o.name,o.path,psi.programstageinstanceid::text,psi.uid,to_char(psi.created,'YYYY-MM-DD') created,to_char(psi.created,'MM') m,to_char(psi.lastupdated,'YYYY-MM-DD') lastupdated,programinstanceid::text,programstageid::text,attributeoptioncomboid::text,psi.deleted,psi.storedby,to_char(duedate,'YYYY-MM-DD') duedate,to_char(executiondate,'YYYY-MM-DD') executiondate,psi.organisationunitid::text,status,completedby,to_char(completeddate,'YYYY-MM-DD') completeddate,eventdatavalues->'bbnyNYD1wgS'->>'value' as vaccine,eventdatavalues->'LUIsbsm3okG'->>'value' as dose,assigneduserid::text,psi.createdbyuserinfo,psi.lastupdatedbyuserinfo from programstageinstance psi inner join organisationunit o using(organisationunitid) where psi.created >= '${start}' and psi.created < '${end}' and programstageid = 12715`
@@ -49,7 +49,7 @@ const processData = async () => {
           await processAndInsert("programstageinstance", rows);
         }
       }
-      console.log(`Finished working on ${start} to ${end}`);
+      console.log(`Finished working on ${start}`);
     }
   } catch (error) {
     console.log(error.message);
