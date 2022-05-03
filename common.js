@@ -14,12 +14,21 @@ module.exports.api = axios.create({
   baseURL: "https://services.dhis2.hispuganda.org/",
 });
 
-module.exports.query = `select
-  o.uid as orgUnit,
+module.exports.query = `select o.uid as orgUnit,
   o.path,
-  (select ot.uid from organisationunit ot where ot.organisationunitid = tei.organisationunitid) as regOrgUnit,
-  (select ot.path from organisationunit ot where ot.organisationunitid = tei.organisationunitid) as regPath,  
-  concat(tei.uid,psi.uid) as id,
+  ps.uid as stage,
+  ps.name as stagename,
+  (
+    select ot.uid
+    from organisationunit ot
+    where ot.organisationunitid = tei.organisationunitid
+  ) as regOrgUnit,
+  (
+    select ot.path
+    from organisationunit ot
+    where ot.organisationunitid = tei.organisationunitid
+  ) as regPath,
+  concat(tei.uid, psi.uid) as id,
   (
     select jsonb_object_agg(tea.uid, value) AS months
     from trackedentityattributevalue teav
@@ -67,7 +76,11 @@ module.exports.query = `select
       'completedby',
       psi.completedby,
       'completeddate',
-      psi.completeddate
+      psi.completeddate,
+      'createdbyuserinfo',
+      psi.createdbyuserinfo,
+      'lastupdatedbyuserinfo',
+      psi.lastupdatedbyuserinfo
     )
   ) || jsonb_build_object(
     'tei',
@@ -78,15 +91,16 @@ module.exports.query = `select
       tei.created,
       'lastupdated',
       tei.lastupdated,
-      'lastupdatedby',
-      tei.lastupdatedby,
       'inactive',
       tei.inactive,
       'deleted',
-      tei.deleted
+      tei.deleted,
+      'storedby',
+      tei.storedby
     )
   ) as dt
 from programstageinstance psi
+  inner join programstage ps using(programstageid)
   inner join organisationunit o using(organisationunitid)
   inner join programinstance pi using(programinstanceid)
   inner join trackedentityinstance tei using(trackedentityinstanceid);`;
