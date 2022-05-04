@@ -1,5 +1,18 @@
-select
-  concat(tei.uid,psi.uid) as id,
+select o.uid as orgUnit,
+  o.path,
+  ps.uid as stage,
+  ps.name as stagename,
+  (
+    select ot.uid
+    from organisationunit ot
+    where ot.organisationunitid = tei.organisationunitid
+  ) as regOrgUnit,
+  (
+    select ot.path
+    from organisationunit ot
+    where ot.organisationunitid = tei.organisationunitid
+  ) as regPath,
+  concat(tei.uid, psi.uid) as id,
   (
     select jsonb_object_agg(tea.uid, value) AS months
     from trackedentityattributevalue teav
@@ -12,18 +25,10 @@ select
       pi.created,
       'lastupdated',
       pi.lastupdated,
-      'createdatclient',
-      pi.createdatclient,
-      'lastupdatedatclient',
-      pi.lastupdatedatclient,
       'incidentdate',
       pi.incidentdate,
       'enrollmentdate',
       pi.enrollmentdate,
-      'enddate',
-      pi.enddate,
-      'followup',
-      pi.followup,
       'completedby',
       pi.completedby,
       'deleted',
@@ -38,22 +43,10 @@ select
     jsonb_build_object(
       'uid',
       psi.uid,
-      'code',
-      psi.code,
       'created',
       psi.created,
       'lastupdated',
       psi.lastupdated,
-      'createdatclient',
-      psi.createdatclient,
-      'lastupdatedatclient',
-      psi.lastupdatedatclient,
-      'lastsynchronized',
-      psi.lastsynchronized,
-      'programinstanceid',
-      psi.programinstanceid,
-      'programstageid',
-      psi.programstageid,
       'deleted',
       psi.deleted,
       'storedby',
@@ -62,40 +55,36 @@ select
       psi.duedate,
       'executiondate',
       psi.executiondate,
-      'organisationunitid',
-      psi.organisationunitid,
       'status',
       psi.status,
       'completedby',
       psi.completedby,
       'completeddate',
-      psi.completeddate
+      psi.completeddate,
+      'createdbyuserinfo',
+      psi.createdbyuserinfo,
+      'lastupdatedbyuserinfo',
+      psi.lastupdatedbyuserinfo
     )
   ) || jsonb_build_object(
     'tei',
     jsonb_build_object(
       'uid',
       tei.uid,
-      'code',
-      tei.code,
       'created',
       tei.created,
       'lastupdated',
       tei.lastupdated,
-      'lastupdatedby',
-      tei.lastupdatedby,
-      'createdatclient',
-      tei.createdatclient,
-      'lastupdatedatclient',
-      tei.lastupdatedatclient,
       'inactive',
       tei.inactive,
       'deleted',
       tei.deleted,
-      'lastsynchronized',
-      tei.lastsynchronized
+      'storedby',
+      tei.storedby
     )
   ) as dt
 from programstageinstance psi
+  inner join programstage ps using(programstageid)
+  inner join organisationunit o using(organisationunitid)
   inner join programinstance pi using(programinstanceid)
-  inner join trackedentityinstance tei using(trackedentityinstanceid);
+  inner join trackedentityinstance tei using(trackedentityinstanceid) where psi.storedby = 'data.spt' limit 10;
