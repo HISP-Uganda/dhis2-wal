@@ -103,7 +103,7 @@ from programstageinstance psi
   inner join programstage ps using(programstageid)
   inner join organisationunit o using(organisationunitid)
   inner join programinstance pi using(programinstanceid)
-  inner join trackedentityinstance tei using(trackedentityinstanceid) where ps.uid = 'a1jCssI2LkW' order by lastupdated desc;`;
+  inner join trackedentityinstance tei using(trackedentityinstanceid) where ps.uid = 'a1jCssI2LkW';`;
 
 module.exports.processAndInsert = async (index, rows) => {
   const all = rows.map(({ path, ...others }) => {
