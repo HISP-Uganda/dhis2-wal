@@ -57,8 +57,10 @@ const transferAll = async (index, q) => {
   const client = await pool.connect();
   const cursor = client.query(new Cursor(q));
   let rows = await cursor.read(batchSize);
-  await processAndInsert(index, rows);
-  while (rows.length) {
+  if (rows.length > 0) {
+    await processAndInsert(index, rows);
+  }
+  while (rows.length > 0) {
     rows = await cursor.read(batchSize);
     if (rows.length > 0) {
       await processAndInsert(index, rows);

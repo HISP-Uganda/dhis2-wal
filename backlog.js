@@ -42,8 +42,10 @@ const processData = async () => {
       );
 
       let rows = await cursor.read(batchSize);
-      await processAndInsert("programstageinstance", rows);
-      while (rows.length) {
+      if (rows.length > 0) {
+        await processAndInsert("programstageinstance", rows);
+      }
+      while (rows.length > 0) {
         rows = await cursor.read(batchSize);
         if (rows.length > 0) {
           await processAndInsert("programstageinstance", rows);
