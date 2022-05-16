@@ -1,6 +1,6 @@
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
-const { processAndInsert, batchSize, backlogQuery } = require("./common.js");
+const { processAndInsert2, batchSize, intervalQuery } = require("./common.js");
 const dotenv = require("dotenv");
 const cron = require("node-cron");
 dotenv.config();
@@ -16,15 +16,15 @@ const pool = new Pool({
 cron.schedule("*/5 * * * *", async () => {
   const client = await pool.connect();
   try {
-    const cursor = client.query(new Cursor(backlogQuery));
+    const cursor = client.query(new Cursor(intervalQuery));
     let rows = await cursor.read(batchSize);
     if (rows.length > 0) {
-      await processAndInsert("programstageinstance", rows);
+      await processAndInsert2("epivac", rows);
     }
     while (rows.length > 0) {
       rows = await cursor.read(batchSize);
       if (rows.length > 0) {
-        await processAndInsert("programstageinstance", rows);
+        await processAndInsert2("epivac", rows);
       }
     }
   } catch (error) {

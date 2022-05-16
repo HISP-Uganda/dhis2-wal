@@ -1,7 +1,7 @@
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
 const _ = require("lodash");
-const { query, api, batchSize } = require("./common");
+const { query, batchSize, processAndInsert2 } = require("./common");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -14,59 +14,20 @@ const pool = new Pool({
   database: process.env.PG_DATABASE,
 });
 
-const processAndInsert = async (index, rows) => {
-  const all = rows.map(
-    ({ id, stage, stagename, dt, orgunit, path, regorgunit, regpath }) => {
-      const eventOrgUnit = _.fromPairs(
-        String(path)
-          .split("/")
-          .slice(1)
-          .map((x, i) => {
-            return [`level${i + 1}`, x];
-          })
-      );
-      const registrationOrgUnit = _.fromPairs(
-        String(regpath)
-          .split("/")
-          .slice(1)
-          .map((x, i) => {
-            return [`level${i + 1}`, x];
-          })
-      );
-      let all = { id, ...dt, stage, stagename };
-      if (dt && dt.event) {
-        all = { ...all, event: { ...dt.event, ...eventOrgUnit, orgunit } };
-      }
-
-      if (dt && dt.tei) {
-        all = {
-          ...all,
-          tei: { ...dt.tei, ...registrationOrgUnit, regorgunit },
-        };
-      }
-      return all;
-    }
-  );
-  const { data } = await api.post(`wal/index?index=${index}`, {
-    data: all,
-  });
-  console.log(data);
-};
-
-const transferAll = async (index, q) => {
+const transferAll = async (index) => {
   const client = await pool.connect();
-  const cursor = client.query(new Cursor(q));
+  const cursor = client.query(new Cursor(query));
   let rows = await cursor.read(batchSize);
   if (rows.length > 0) {
-    await processAndInsert(index, rows);
+    await processAndInsert2(index, rows);
   }
   while (rows.length > 0) {
     rows = await cursor.read(batchSize);
     if (rows.length > 0) {
-      await processAndInsert(index, rows);
+      await processAndInsert2(index, rows);
     }
   }
   cursor.close(() => client.release());
 };
 
-transferAll("epivac", query).then(() => console.log("Done"));
+transferAll("epivac").then(() => console.log("Done"));
