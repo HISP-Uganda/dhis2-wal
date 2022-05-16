@@ -87,4 +87,71 @@ from programstageinstance psi
   inner join programstage ps using(programstageid)
   inner join organisationunit o using(organisationunitid)
   inner join programinstance pi using(programinstanceid)
-  inner join trackedentityinstance tei using(trackedentityinstanceid) where psi.storedby = 'data.spt' limit 10;
+  inner join trackedentityinstance tei using(trackedentityinstanceid)
+where psi.storedby = 'data.spt'
+limit 10;
+select o.uid ou,
+  o.name,
+  o.path,
+  psi.programstageinstanceid::text,
+  psi.uid,
+  to_char(psi.created, 'YYYY-MM-DD') created,
+  to_char(psi.created, 'MM') m,
+  to_char(psi.lastupdated, 'YYYY-MM-DD') lastupdated,
+  programinstanceid::text,
+  programstageid::text,
+  attributeoptioncomboid::text,
+  psi.deleted,
+  psi.storedby,
+  to_char(duedate, 'YYYY-MM-DD') duedate,
+  to_char(executiondate, 'YYYY-MM-DD') executiondate,
+  psi.organisationunitid::text,
+  status,
+  completedby,
+  to_char(completeddate, 'YYYY-MM-DD') completeddate,
+  eventdatavalues->'bbnyNYD1wgS'->>'value' as vaccine,
+  eventdatavalues->'LUIsbsm3okG'->>'value' as dose,
+  assigneduserid::text,
+  psi.createdbyuserinfo,
+  psi.lastupdatedbyuserinfo,
+  EXTRACT(
+    EPOCH
+    FROM DATE_TRUNC('second', psi.created)
+  ),
+  EXTRACT(
+    EPOCH
+    FROM DATE_TRUNC('second', localtimestamp - interval '5 minutes')
+  )
+from programstageinstance psi
+  inner join organisationunit o using(organisationunitid)
+limit 10;
+select o.uid ou,
+  o.name,
+  o.path,
+  psi.programstageinstanceid::text,
+  psi.uid,
+  to_char(psi.created, 'YYYY-MM-DD') created,
+  psi.created,
+  LOCALTIMESTAMP - INTERVAL '3 hours 5 minutes',
+  to_char(psi.created, 'MM') m,
+  to_char(psi.lastupdated, 'YYYY-MM-DD') lastupdated,
+  programinstanceid::text,
+  programstageid::text,
+  attributeoptioncomboid::text,
+  psi.deleted,
+  psi.storedby,
+  to_char(duedate, 'YYYY-MM-DD') duedate,
+  to_char(executiondate, 'YYYY-MM-DD') executiondate,
+  psi.organisationunitid::text,
+  status,
+  completedby,
+  to_char(completeddate, 'YYYY-MM-DD') completeddate,
+  eventdatavalues->'bbnyNYD1wgS'->>'value' as vaccine,
+  eventdatavalues->'LUIsbsm3okG'->>'value' as dose,
+  assigneduserid::text,
+  psi.createdbyuserinfo,
+  psi.lastupdatedbyuserinfo
+from programstageinstance psi
+  inner join organisationunit o using(organisationunitid)
+where psi.created >= LOCALTIMESTAMP - INTERVAL '3 hours 5 minutes'
+  and programstageid = 12715;
