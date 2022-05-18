@@ -383,7 +383,7 @@ module.exports.processAndInsert2 = async (index, rows) => {
       return all;
     }
   );
-  const { data } = await api.post(`wal/index?index=${index}`, {
+  const { data } = await this.api.post(`wal/index?index=${index}`, {
     data: all,
   });
   console.log(data);
