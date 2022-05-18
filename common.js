@@ -258,7 +258,7 @@ module.exports.processAndInsert = async (index, rows) => {
 };
 
 module.exports.createBacklogQuery = (start, end) => {
-  retrun`select o.uid as orgUnit,
+  return `select o.uid as orgUnit,
   o.path,
   ps.uid as stage,
   ps.name as stagename,
