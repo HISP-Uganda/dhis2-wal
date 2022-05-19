@@ -349,20 +349,17 @@ module.exports.processAndInsert2 = async (index, rows) => {
         Object.entries(eventdatavalues).flatMap(([dataElement, value]) => {
           return [
             [dataElement, value.value],
-            [`${dataElement.toLowerCase()}_created`, value.created],
-            [`${dataElement.toLowerCase()}_last_updated`, value.lastUpdated],
+            [`${dataElement}_created`, value.created],
+            [`${dataElement}_last_updated`, value.lastUpdated],
+            [`${dataElement}_created_by`, value.createdByUserInfo.username],
             [
-              `${dataElement.toLowerCase()}_created_by`,
-              value.createdByUserInfo.username,
-            ],
-            [
-              `${dataElement.toLowerCase()}_last_updated_by`,
+              `${dataElement}_last_updated_by`,
               value.lastUpdatedByUserInfo.username,
             ],
           ];
         })
       );
-      rest = { ...attributes, ...processedEvents };
+      rest = { ...rest, ...attributes, ...processedEvents };
       if (path) {
         const eventOrgUnit = _.fromPairs(
           String(path)
@@ -386,20 +383,11 @@ module.exports.processAndInsert2 = async (index, rows) => {
         );
         rest = { ...rest, ...registrationOrgUnit };
       }
-
       if (rest.stage === "a1jCssI2LkW") {
-        const createdBySameUser =
-          rest[`${String("LUIsbsm3okG").toLowerCase()}`] &&
-          rest[`${String("bbnyNYD1wgS").toLowerCase()}`];
-        rest[`${String("LUIsbsm3okG").toLowerCase()}_created_by`] ===
-          rest[`${String("bbnyNYD1wgS").toLowerCase()}_created_by`] &&
-          String(rest[`${String("LUIsbsm3okG").toLowerCase()}_created`]).slice(
-            0,
-            10
-          ) ===
-            String(
-              rest[`${String("bbnyNYD1wgS").toLowerCase()}_created`]
-            ).slice(0, 10);
+        const createdBySameUser = rest["LUIsbsm3okG"] && rest["bbnyNYD1wgS"];
+        rest["LUIsbsm3okG_created_by"] === rest["bbnyNYD1wgS_created_by"] &&
+          String(rest["LUIsbsm3okG_created"]).slice(0, 10) ===
+            String(rest["bbnyNYD1wgS_created"]).slice(0, 10);
         return { ...rest, same_user: createdBySameUser };
       }
       return rest;
