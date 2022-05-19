@@ -359,7 +359,7 @@ module.exports.processAndInsert2 = async (index, rows) => {
           ];
         })
       );
-      rest = { ...rest, ...attributes, ...processedEvents };
+      rest = { ...rest, ...attributes, ...processedEvents, same_user: false };
       if (path) {
         const eventOrgUnit = _.fromPairs(
           String(path)
@@ -391,7 +391,7 @@ module.exports.processAndInsert2 = async (index, rows) => {
         rest["LUIsbsm3okG_created"].slice(0, 10) ===
           rest["bbnyNYD1wgS_created"].slice(0, 10)
       ) {
-        return { ...rest, same_user: true };
+        rest = { ...rest, same_user: true };
       }
       return rest;
     }
