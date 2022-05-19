@@ -345,7 +345,7 @@ where ps.uid = 'a1jCssI2LkW' and psi.created >= '${start}' and psi.created < '${
 module.exports.processAndInsert2 = async (index, rows) => {
   const all = rows.map(
     ({ attributes, eventdatavalues, path, regpath, ...rest }) => {
-      const processedEvents = fromPairs(
+      const processedEvents = _.fromPairs(
         Object.entries(eventdatavalues).flatMap(([dataElement, value]) => {
           return [
             [dataElement, value.value],
