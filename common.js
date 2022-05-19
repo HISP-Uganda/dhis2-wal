@@ -487,4 +487,4 @@ module.exports.processAndInsert2 = async (index, rows) => {
   console.log(data);
 };
 
-module.exports.batchSize = 5000;
+module.exports.batchSize = 2500;
