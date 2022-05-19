@@ -349,7 +349,10 @@ module.exports.processAndInsert = async (index, rows) => {
     const { data } = await this.api.post(`wal/index?index=${index}`, {
       data: all,
     });
-    console.log(data);
+    console.log(data.inserted);
+    data.errorDocuments.forEach(({ error, document }) =>
+      console.error(error, document)
+    );
   } catch (error) {
     console.log(error.message);
   }
@@ -484,7 +487,10 @@ module.exports.processAndInsert2 = async (index, rows) => {
   const { data } = await this.api.post(`wal/index?index=${index}`, {
     data: all,
   });
-  console.log(data);
+  console.log(data.inserted);
+  data.errorDocuments.forEach(({ error, document }) =>
+    console.error(error, document)
+  );
 };
 
 module.exports.batchSize = 2000;
