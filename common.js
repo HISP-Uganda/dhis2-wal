@@ -383,12 +383,15 @@ module.exports.processAndInsert2 = async (index, rows) => {
         );
         rest = { ...rest, ...registrationOrgUnit };
       }
-      if (rest.stage === "a1jCssI2LkW") {
-        const createdBySameUser = rest["LUIsbsm3okG"] && rest["bbnyNYD1wgS"];
+      if (
+        rest.stage === "a1jCssI2LkW" &&
+        rest["LUIsbsm3okG"] &&
+        rest["bbnyNYD1wgS"] &&
         rest["LUIsbsm3okG_created_by"] === rest["bbnyNYD1wgS_created_by"] &&
-          String(rest["LUIsbsm3okG_created"]).slice(0, 10) ===
-            String(rest["bbnyNYD1wgS_created"]).slice(0, 10);
-        return { ...rest, same_user: createdBySameUser };
+        rest["LUIsbsm3okG_created"].slice(0, 10) ===
+          rest["bbnyNYD1wgS_created"].slice(0, 10)
+      ) {
+        return { ...rest, same_user: true };
       }
       return rest;
     }
