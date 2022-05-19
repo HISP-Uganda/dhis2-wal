@@ -387,7 +387,7 @@ module.exports.processAndInsert2 = async (index, rows) => {
         rest = { ...rest, ...registrationOrgUnit };
       }
 
-      if (stage === "a1jCssI2LkW") {
+      if (rest.stage === "a1jCssI2LkW") {
         const createdBySameUser =
           rest[`${String("LUIsbsm3okG").toLowerCase()}`] &&
           rest[`${String("bbnyNYD1wgS").toLowerCase()}`];
