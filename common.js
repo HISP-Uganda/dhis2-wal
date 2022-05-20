@@ -306,66 +306,70 @@ where ps.uid = 'a1jCssI2LkW' and psi.created >= '${start}' and psi.created < '${
 };
 
 module.exports.processAndInsert2 = async (index, rows) => {
-  const all = rows.map(
-    ({ attributes, eventdatavalues, path, regpath, ...rest }) => {
-      const processedEvents = _.fromPairs(
-        Object.entries(eventdatavalues).flatMap(([dataElement, value]) => {
-          return [
-            [dataElement, value.value],
-            [`${dataElement}_created`, value.created],
-            [`${dataElement}_last_updated`, value.lastUpdated],
-            [`${dataElement}_created_by`, value.createdByUserInfo.username],
-            [
-              `${dataElement}_last_updated_by`,
-              value.lastUpdatedByUserInfo.username,
-            ],
-          ];
-        })
-      );
-      rest = { ...rest, ...attributes, ...processedEvents, same_user: false };
-      if (path) {
-        const eventOrgUnit = _.fromPairs(
-          String(path)
-            .split("/")
-            .slice(1)
-            .map((x, i) => {
-              return [`event_level${i + 1}`, x];
-            })
+  try {
+    const all = rows.map(
+      ({ attributes, eventdatavalues, path, regpath, ...rest }) => {
+        const processedEvents = _.fromPairs(
+          Object.entries(eventdatavalues).flatMap(([dataElement, value]) => {
+            return [
+              [dataElement, value.value],
+              [`${dataElement}_created`, value.created],
+              [`${dataElement}_last_updated`, value.lastUpdated],
+              [`${dataElement}_created_by`, value.createdByUserInfo?.username],
+              [
+                `${dataElement}_last_updated_by`,
+                value.lastUpdatedByUserInfo?.username,
+              ],
+            ];
+          })
         );
+        rest = { ...rest, ...attributes, ...processedEvents, same_user: false };
+        if (path) {
+          const eventOrgUnit = _.fromPairs(
+            String(path)
+              .split("/")
+              .slice(1)
+              .map((x, i) => {
+                return [`event_level${i + 1}`, x];
+              })
+          );
 
-        rest = { ...rest, ...eventOrgUnit };
+          rest = { ...rest, ...eventOrgUnit };
+        }
+        if (regpath) {
+          const registrationOrgUnit = _.fromPairs(
+            String(regpath)
+              .split("/")
+              .slice(1)
+              .map((x, i) => {
+                return [`reg_level${i + 1}`, x];
+              })
+          );
+          rest = { ...rest, ...registrationOrgUnit };
+        }
+        if (
+          rest.stage === "a1jCssI2LkW" &&
+          rest["LUIsbsm3okG"] &&
+          rest["bbnyNYD1wgS"] &&
+          rest["LUIsbsm3okG_created_by"] === rest["bbnyNYD1wgS_created_by"] &&
+          rest["LUIsbsm3okG_created"].slice(0, 10) ===
+            rest["bbnyNYD1wgS_created"].slice(0, 10)
+        ) {
+          rest = { ...rest, same_user: true };
+        }
+        return rest;
       }
-      if (regpath) {
-        const registrationOrgUnit = _.fromPairs(
-          String(regpath)
-            .split("/")
-            .slice(1)
-            .map((x, i) => {
-              return [`reg_level${i + 1}`, x];
-            })
-        );
-        rest = { ...rest, ...registrationOrgUnit };
-      }
-      if (
-        rest.stage === "a1jCssI2LkW" &&
-        rest["LUIsbsm3okG"] &&
-        rest["bbnyNYD1wgS"] &&
-        rest["LUIsbsm3okG_created_by"] === rest["bbnyNYD1wgS_created_by"] &&
-        rest["LUIsbsm3okG_created"].slice(0, 10) ===
-          rest["bbnyNYD1wgS_created"].slice(0, 10)
-      ) {
-        rest = { ...rest, same_user: true };
-      }
-      return rest;
-    }
-  );
-  const { data } = await this.api.post(`wal/index?index=${index}`, {
-    data: all,
-  });
-  console.log(data.inserted);
-  data.errorDocuments.forEach(({ error, document }) =>
-    console.error(error, document)
-  );
+    );
+    const { data } = await this.api.post(`wal/index?index=${index}`, {
+      data: all,
+    });
+    console.log(data.inserted);
+    data.errorDocuments.forEach(({ error, document }) =>
+      console.error(error, document)
+    );
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 module.exports.batchSize = 2500;
