@@ -18,7 +18,6 @@ cron.schedule("*/5 * * * *", async () => {
   try {
     const cursor = client.query(new Cursor(intervalQuery));
     let rows = await cursor.read(batchSize);
-    console.log(rows);
     if (rows.length > 0) {
       await processAndInsert2("epivac", rows);
     }
