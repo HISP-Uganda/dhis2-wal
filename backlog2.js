@@ -7,6 +7,7 @@ const {
   createBacklogQuery,
 } = require("./common.js");
 const dotenv = require("dotenv");
+const { sortBy, orderBy } = require("lodash");
 dotenv.config();
 
 const args = process.argv.slice(2);
@@ -37,7 +38,13 @@ const processData = async () => {
     ]);
   const client = await pool.connect();
   try {
-    for (const [start, end] of dates) {
+    for (const [start, end] of orderBy(
+      dates,
+      (o) => {
+        return o[0];
+      },
+      ["desc"]
+    )) {
       console.log(`Working on ${start}`);
       const cursor = client.query(new Cursor(createBacklogQuery(start, end)));
       let rows = await cursor.read(batchSize);
