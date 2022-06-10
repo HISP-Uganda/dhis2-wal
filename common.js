@@ -14,6 +14,8 @@ module.exports.api = axios.create({
   baseURL: "https://services.dhis2.hispuganda.org/",
 });
 
+module.exports.updateQuery = `update programstageinstance set executiondate = created where executiondate < '2021-03-10' or executiondate > CURRENT_DATE + interval '1 day';`;
+
 module.exports.backlogQuery = `select o.uid ou,
   o.name,
   o.path,
@@ -153,10 +155,10 @@ from programstageinstance psi
   inner join trackedentityinstance tei using(trackedentityinstanceid)
 where ps.uid = 'a1jCssI2LkW'
   and (
-    tei.created >= LOCALTIMESTAMP - INTERVAL '3 hours 5 minutes'
-    or tei.lastupdated >= LOCALTIMESTAMP - INTERVAL '3 hours 5 minutes'
-    or psi.created >= LOCALTIMESTAMP - INTERVAL '3 hours 5 minutes'
-    or psi.lastupdated >= LOCALTIMESTAMP - INTERVAL '3 hours 5 minutes'
+    tei.created >= LOCALTIMESTAMP - INTERVAL '5 minutes'
+    or tei.lastupdated >= LOCALTIMESTAMP - INTERVAL '5 minutes'
+    or psi.created >= LOCALTIMESTAMP - INTERVAL '5 minutes'
+    or psi.lastupdated >= LOCALTIMESTAMP - INTERVAL '5 minutes'
   );`;
 
 module.exports.monthlyBacklogQuery = (date) => `select o.uid as orgUnit,
