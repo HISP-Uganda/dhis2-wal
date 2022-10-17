@@ -238,7 +238,7 @@ module.exports.processAndInsert = async (index, rows) => {
     };
   });
   try {
-    const { data } = await this.api.post(`wal/index?index=${index}`, {
+    const { data } = await this.api.post(`wal/bulk?index=${index}`, {
       data: all,
     });
     console.log(data.inserted);
@@ -419,7 +419,7 @@ module.exports.processAndInsert2 = async (index, rows) => {
         return rest;
       }
     );
-    const { data } = await this.api.post(`wal/index?index=${index}`, {
+    const { data } = await this.api.post(`wal/bulk?index=${index}`, {
       data: all,
     });
     console.log(data.inserted);

@@ -15,7 +15,7 @@ export const client = await pgwire.connect({
 });
 client.on("notification", ({ channel, payload }) => {
   try {
-    common.api.post(`wal/index?index=${channel}`, JSON.parse(payload));
+    common.api.post(`wal/bulk?index=${channel}`, JSON.parse(payload));
   } catch (error) {
     console.log(error.message);
   }

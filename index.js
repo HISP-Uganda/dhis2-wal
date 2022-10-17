@@ -22,7 +22,7 @@ let organisationUnits = {};
 try {
   // const [stopLsn] = await conn.query(`select pg_current_wal_lsn()`);
   // if (args[0] !== "organisationunit") {
-  //   const data = await common.api.post(`wal/index?index=${channel}`, data);
+  //   const data = await common.api.post(`wal/bulk?index=${channel}`, data);
   // }
   const replicationStream = conn.logicalReplication({
     slot: `${args[0]}_slot`,
@@ -43,7 +43,7 @@ try {
       });
     try {
       if (data.length > 0) {
-        await common.api.post(`wal/index?index=${args[0]}`, {
+        await common.api.post(`wal/bulk?index=${args[0]}`, {
           data,
           index: args[0],
         });
