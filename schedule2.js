@@ -13,33 +13,23 @@ const pool = new Pool({
     database: process.env.PG_DATABASE_LIVE,
 });
 
-const scheduleData = async () => {
-    console.log("connecting");
+cron.schedule("*/5 * * * *", async () => {
     const client = await pool.connect();
-    // try {
-    console.log("Quaring");
-    const cursor = client.query(new Cursor(intervalQuery));
-    console.log("Inserting");
-    let rows = await cursor.read(batchSize);
-    console.log(rows[0]);
-    if (rows.length > 0) {
-        await processAndInsert2("epivac", rows);
-    }
-    while (rows.length > 0) {
-        rows = await cursor.read(batchSize);
+    try {
+        const cursor = client.query(new Cursor(intervalQuery));
+        let rows = await cursor.read(batchSize);
         if (rows.length > 0) {
             await processAndInsert2("epivac", rows);
         }
+        while (rows.length > 0) {
+            rows = await cursor.read(batchSize);
+            if (rows.length > 0) {
+                await processAndInsert2("epivac", rows);
+            }
+        }
+    } catch (error) {
+        console.log(error.message);
+    } finally {
+        client.release();
     }
-    // } catch (error) {
-    //     console.log(error.message);
-    // } finally {
-    //     client.release();
-    // }
-};
-
-// cron.schedule("*/5 * * * *", async () => {
-
-// });
-
-scheduleData().then(() => console.log("Done"));
+});
