@@ -17,7 +17,9 @@ const scheduleData = async () => {
     console.log("connecting");
     const client = await pool.connect();
     // try {
+    console.log("Quaring");
     const cursor = client.query(new Cursor(intervalQuery));
+    console.log("Inserting");
     let rows = await cursor.read(batchSize);
     if (rows.length > 0) {
         await processAndInsert2("epivac", rows);
