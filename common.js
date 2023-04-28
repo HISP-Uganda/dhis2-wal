@@ -2,16 +2,16 @@ const axios = require("axios");
 const _ = require("lodash");
 
 const hirarchy = {
-  0: "national",
-  1: "region",
-  2: "district",
-  3: "subcounty",
-  4: "facility",
+    0: "national",
+    1: "region",
+    2: "district",
+    3: "subcounty",
+    4: "facility",
 };
 
 module.exports.api = axios.create({
-  // baseURL: "http://localhost:3001/",
-  baseURL: "https://services.dhis2.hispuganda.org/",
+    // baseURL: "http://localhost:3001/",
+    baseURL: "https://services.dhis2.hispuganda.org/",
 });
 
 module.exports.updateQuery = `update programstageinstance set executiondate = created where executiondate < '2021-03-10' or executiondate > CURRENT_DATE + interval '1 day';`;
@@ -223,35 +223,35 @@ where ps.uid = 'a1jCssI2LkW'
   )`;
 
 module.exports.processAndInsert = async (index, rows) => {
-  const all = rows.map(({ path, ...others }) => {
-    const units = _.fromPairs(
-      String(path)
-        .split("/")
-        .slice(1)
-        .map((x, i) => {
-          return [hirarchy[i] || "other", x];
-        })
-    );
-    return {
-      ...others,
-      path: units,
-    };
-  });
-  try {
-    const { data } = await this.api.post(`wal/bulk?index=${index}`, {
-      data: all,
+    const all = rows.map(({ path, ...others }) => {
+        const units = _.fromPairs(
+            String(path)
+                .split("/")
+                .slice(1)
+                .map((x, i) => {
+                    return [hirarchy[i] || "other", x];
+                })
+        );
+        return {
+            ...others,
+            path: units,
+        };
     });
-    console.log(data.inserted);
-    data.errorDocuments.forEach(({ error, document }) =>
-      console.error(error, document)
-    );
-  } catch (error) {
-    console.log(error.message);
-  }
+    try {
+        const { data } = await this.api.post(`wal/bulk?index=${index}`, {
+            data: all,
+        });
+        console.log(data.inserted);
+        data.errorDocuments.forEach(({ error, document }) =>
+            console.error(error, document)
+        );
+    } catch (error) {
+        console.log(error.message);
+    }
 };
 
 module.exports.createBacklogQuery = (start, end) => {
-  return `select o.uid as orgUnit,
+    return `select o.uid as orgUnit,
   o.path,
   ps.uid as stage,
   ps.name as stagename,
@@ -308,7 +308,7 @@ where ps.uid = 'a1jCssI2LkW' and psi.created >= '${start}' and psi.created < '${
 };
 
 module.exports.queryByNIN = (nin) => {
-  return `select o.uid as orgUnit,
+    return `select o.uid as orgUnit,
   o.path,
   ps.uid as stage,
   ps.name as stagename,
@@ -365,70 +365,84 @@ where ps.uid = 'a1jCssI2LkW' tei.trackedentityinstanceid = (select trackedentity
 };
 
 module.exports.processAndInsert2 = async (index, rows) => {
-  try {
-    const all = rows.map(
-      ({ attributes, eventdatavalues, path, regpath, ...rest }) => {
-        const processedEvents = _.fromPairs(
-          Object.entries(eventdatavalues).flatMap(([dataElement, value]) => {
-            return [
-              [dataElement, value.value],
-              [`${dataElement}_created`, value.created],
-              [`${dataElement}_last_updated`, value.lastUpdated],
-              [`${dataElement}_created_by`, value.createdByUserInfo?.username],
-              [
-                `${dataElement}_last_updated_by`,
-                value.lastUpdatedByUserInfo?.username,
-              ],
-            ];
-          })
-        );
-        rest = { ...rest, ...attributes, ...processedEvents, same_user: false };
-        if (path) {
-          const eventOrgUnit = _.fromPairs(
-            String(path)
-              .split("/")
-              .slice(1)
-              .map((x, i) => {
-                return [`event_level${i + 1}`, x];
-              })
-          );
+    try {
+        const all = rows.map(
+            ({ attributes, eventdatavalues, path, regpath, ...rest }) => {
+                const processedEvents = _.fromPairs(
+                    Object.entries(eventdatavalues).flatMap(
+                        ([dataElement, value]) => {
+                            return [
+                                [dataElement, value.value],
+                                [`${dataElement}_created`, value.created],
+                                [
+                                    `${dataElement}_last_updated`,
+                                    value.lastUpdated,
+                                ],
+                                [
+                                    `${dataElement}_created_by`,
+                                    value.createdByUserInfo?.username,
+                                ],
+                                [
+                                    `${dataElement}_last_updated_by`,
+                                    value.lastUpdatedByUserInfo?.username,
+                                ],
+                            ];
+                        }
+                    )
+                );
+                rest = {
+                    ...rest,
+                    ...attributes,
+                    ...processedEvents,
+                    same_user: false,
+                };
+                if (path) {
+                    const eventOrgUnit = _.fromPairs(
+                        String(path)
+                            .split("/")
+                            .slice(1)
+                            .map((x, i) => {
+                                return [`event_level${i + 1}`, x];
+                            })
+                    );
 
-          rest = { ...rest, ...eventOrgUnit };
-        }
-        if (regpath) {
-          const registrationOrgUnit = _.fromPairs(
-            String(regpath)
-              .split("/")
-              .slice(1)
-              .map((x, i) => {
-                return [`reg_level${i + 1}`, x];
-              })
-          );
-          rest = { ...rest, ...registrationOrgUnit };
-        }
-        if (
-          rest.stage === "a1jCssI2LkW" &&
-          rest["LUIsbsm3okG"] &&
-          rest["bbnyNYD1wgS"] &&
-          rest["LUIsbsm3okG_created_by"] === rest["bbnyNYD1wgS_created_by"] &&
-          rest["LUIsbsm3okG_created"].slice(0, 10) ===
-            rest["bbnyNYD1wgS_created"].slice(0, 10)
-        ) {
-          rest = { ...rest, same_user: true };
-        }
-        return rest;
-      }
-    );
-    const { data } = await this.api.post(`wal/bulk?index=${index}`, {
-      data: all,
-    });
-    console.log(data.inserted);
-    data.errorDocuments.forEach(({ error, document }) =>
-      console.error(error, document)
-    );
-  } catch (error) {
-    console.log(error.message);
-  }
+                    rest = { ...rest, ...eventOrgUnit };
+                }
+                if (regpath) {
+                    const registrationOrgUnit = _.fromPairs(
+                        String(regpath)
+                            .split("/")
+                            .slice(1)
+                            .map((x, i) => {
+                                return [`reg_level${i + 1}`, x];
+                            })
+                    );
+                    rest = { ...rest, ...registrationOrgUnit };
+                }
+                if (
+                    rest.stage === "a1jCssI2LkW" &&
+                    rest["LUIsbsm3okG"] &&
+                    rest["bbnyNYD1wgS"] &&
+                    rest["LUIsbsm3okG_created_by"] ===
+                        rest["bbnyNYD1wgS_created_by"] &&
+                    rest["LUIsbsm3okG_created"].slice(0, 10) ===
+                        rest["bbnyNYD1wgS_created"].slice(0, 10)
+                ) {
+                    rest = { ...rest, same_user: true };
+                }
+                return rest;
+            }
+        );
+        const { data } = await this.api.post(`wal/bulk?index=${index}`, {
+            data: all,
+        });
+        console.log(data.inserted);
+        data.errorDocuments.forEach(({ error, document }) =>
+            console.error(error, document)
+        );
+    } catch (error) {
+        console.log(error.message);
+    }
 };
 
 module.exports.batchSize = 2500;

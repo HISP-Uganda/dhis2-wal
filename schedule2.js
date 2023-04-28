@@ -21,6 +21,7 @@ const scheduleData = async () => {
     const cursor = client.query(new Cursor(intervalQuery));
     console.log("Inserting");
     let rows = await cursor.read(batchSize);
+    console.log(rows[0]);
     if (rows.length > 0) {
         await processAndInsert2("epivac", rows);
     }
