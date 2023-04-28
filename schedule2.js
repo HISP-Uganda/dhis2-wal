@@ -14,6 +14,7 @@ const pool = new Pool({
 });
 
 const scheduleData = async () => {
+    console.log("connecting");
     const client = await pool.connect();
     // try {
     const cursor = client.query(new Cursor(intervalQuery));
