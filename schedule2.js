@@ -15,23 +15,23 @@ const pool = new Pool({
 
 const scheduleData = async () => {
     const client = await pool.connect();
-    try {
-        const cursor = client.query(new Cursor(intervalQuery));
-        let rows = await cursor.read(batchSize);
+    // try {
+    const cursor = client.query(new Cursor(intervalQuery));
+    let rows = await cursor.read(batchSize);
+    if (rows.length > 0) {
+        await processAndInsert2("epivac", rows);
+    }
+    while (rows.length > 0) {
+        rows = await cursor.read(batchSize);
         if (rows.length > 0) {
             await processAndInsert2("epivac", rows);
         }
-        while (rows.length > 0) {
-            rows = await cursor.read(batchSize);
-            if (rows.length > 0) {
-                await processAndInsert2("epivac", rows);
-            }
-        }
-    } catch (error) {
-        console.log(error.message);
-    } finally {
-        client.release();
     }
+    // } catch (error) {
+    //     console.log(error.message);
+    // } finally {
+    //     client.release();
+    // }
 };
 
 // cron.schedule("*/5 * * * *", async () => {
