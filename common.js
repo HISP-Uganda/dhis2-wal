@@ -11,7 +11,7 @@ const hirarchy = {
 
 module.exports.api = axios.create({
     // baseURL: "http://localhost:3001/",
-    baseURL: "https://services.dhis2.hispuganda.org/",
+    baseURL: "http://172.27.1.167:3001/",
 });
 
 module.exports.updateQuery = `update programstageinstance set executiondate = created where executiondate < '2021-03-10' or executiondate > CURRENT_DATE + interval '1 day';`;
