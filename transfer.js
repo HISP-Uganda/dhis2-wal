@@ -1,7 +1,7 @@
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
 const _ = require("lodash");
-const { query, batchSize, processAndInsert2 } = require("./common");
+const { queryByProgram, batchSize, processAndInsert2 } = require("./common");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -16,7 +16,7 @@ const pool = new Pool({
 
 const transferAll = async (index) => {
     const client = await pool.connect();
-    const cursor = client.query(new Cursor(query));
+    const cursor = client.query(new Cursor(queryByProgram("yDuAzyqYABS")));
     let rows = await cursor.read(batchSize);
     if (rows.length > 0) {
         await processAndInsert2(index, rows);
