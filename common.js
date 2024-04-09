@@ -78,10 +78,10 @@ module.exports.queryByProgram = (program) =>
 
 module.exports.intervalQuery = this.makeQuery(`where p.uid = 'yDuAzyqYABS'
   and (
-    tei.created >= to_char(LOCALTIMESTAMP - INTERVAL '1 minutes','YYYY-MM-DD HH24:MI:SS')
-    or tei.lastupdated >= to_char(LOCALTIMESTAMP - INTERVAL '1 minutes','YYYY-MM-DD HH24:MI:SS')
-    or psi.created >= to_char(LOCALTIMESTAMP - INTERVAL '1 minutes','YYYY-MM-DD HH24:MI:SS')
-    or psi.lastupdated >= to_char(LOCALTIMESTAMP - INTERVAL '1 minutes','YYYY-MM-DD HH24:MI:SS')
+    tei.created >= LOCALTIMESTAMP - INTERVAL '2 minutes'
+    or tei.lastupdated >= LOCALTIMESTAMP - INTERVAL '2 minutes'
+    or psi.created >= LOCALTIMESTAMP - INTERVAL '2 minutes'
+    or psi.lastupdated >= LOCALTIMESTAMP - INTERVAL '2 minutes'
   );`);
 
 module.exports.monthlyBacklogQuery = (date) =>
