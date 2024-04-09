@@ -78,10 +78,10 @@ module.exports.queryByProgram = (program) =>
 
 module.exports.intervalQuery = this.makeQuery(`where p.uid = 'yDuAzyqYABS'
   and (
-    tei.created >= LOCALTIMESTAMP - INTERVAL '5 minutes'
-    or tei.lastupdated >= LOCALTIMESTAMP - INTERVAL '5 minutes'
-    or psi.created >= LOCALTIMESTAMP - INTERVAL '5 minutes'
-    or psi.lastupdated >= LOCALTIMESTAMP - INTERVAL '5 minutes'
+    tei.created >= to_char(LOCALTIMESTAMP - INTERVAL '6 minutes',''YYYY-MM-DD HH24:MI:SS')
+    or tei.lastupdated >= to_char(LOCALTIMESTAMP - INTERVAL '6 minutes',''YYYY-MM-DD HH24:MI:SS')
+    or psi.created >= to_char(LOCALTIMESTAMP - INTERVAL '5 minutes',''YYYY-MM-DD HH24:MI:SS')
+    or psi.lastupdated >= to_char(LOCALTIMESTAMP - INTERVAL '6 minutes',''YYYY-MM-DD HH24:MI:SS')
   );`);
 
 module.exports.monthlyBacklogQuery = (date) =>
@@ -128,7 +128,7 @@ module.exports.createBacklogQuery = (start, end) =>
 
 module.exports.queryByNIN = (nin) =>
     this.makeQuery(
-        `where p.uid = 'yDuAzyqYABS' tei.trackedentityinstanceid = (select trackedentityinstanceid from trackedentityattributevalue where value = '${nin}');`
+        `where p.uid = 'yDuAzyqYABS' and tei.trackedentityinstanceid = (select trackedentityinstanceid from trackedentityattributevalue where value = '${nin}');`
     );
 
 module.exports.processAndInsert2 = async (index, rows) => {
