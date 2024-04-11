@@ -1,5 +1,9 @@
 const axios = require("axios");
 const _ = require("lodash");
+const utc = require("dayjs/plugin/utc");
+const dayjs = require("dayjs");
+
+dayjs.extend(utc);
 
 const hirarchy = {
     0: "national",
@@ -76,13 +80,19 @@ module.exports.makeQuery = (condition) => {
 module.exports.queryByProgram = (program) =>
     this.makeQuery(` where p.uid = '${program}'`);
 
-module.exports.intervalQuery = this.makeQuery(`where p.uid = 'yDuAzyqYABS'
-  and (
-    tei.created >= LOCALTIMESTAMP - INTERVAL '2 minutes'
-    or tei.lastupdated >= LOCALTIMESTAMP - INTERVAL '2 minutes'
-    or psi.created >= LOCALTIMESTAMP - INTERVAL '2 minutes'
-    or psi.lastupdated >= LOCALTIMESTAMP - INTERVAL '2 minutes'
-  );`);
+module.exports.intervalQuery = (minutes) => {
+    const end = dayjs()
+        .utc()
+        .subtract(minutes, "minutes")
+        .format("YYYY-MM-DD HH:mm:ss");
+    return this.makeQuery(`where p.uid = 'yDuAzyqYABS'
+	and (
+		tei.created >= '${end}'
+		or tei.lastupdated >= '${end}'
+		or psi.created >= '${end}'
+		or psi.lastupdated >= '${end}'
+	);`);
+};
 
 module.exports.monthlyBacklogQuery = (date) =>
     this.makeQuery(`where p.uid = 'yDuAzyqYABS'

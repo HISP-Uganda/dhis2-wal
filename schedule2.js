@@ -15,9 +15,11 @@ const pool = new Pool({
 
 cron.schedule("*/1 * * * *", async () => {
     const client = await pool.connect();
+    console.log(intervalQuery(1));
     try {
-        const cursor = client.query(new Cursor(intervalQuery));
+        const cursor = client.query(new Cursor(intervalQuery(1)));
         let rows = await cursor.read(batchSize);
+        console.log(rows);
         if (rows.length > 0) {
             await processAndInsert2("epivac", rows);
         }
