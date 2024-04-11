@@ -13,10 +13,10 @@ const pool = new Pool({
     database: process.env.PG_DATABASE_LIVE,
 });
 
-cron.schedule("*/5 * * * *", async () => {
+cron.schedule("*/1 * * * *", async () => {
     const client = await pool.connect();
     try {
-        const cursor = client.query(new Cursor(intervalQuery(6)));
+        const cursor = client.query(new Cursor(intervalQuery(2)));
         let rows = await cursor.read(batchSize);
         if (rows.length > 0) {
             await processAndInsert2("epivac", rows);
