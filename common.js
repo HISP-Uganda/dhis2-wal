@@ -85,10 +85,9 @@ module.exports.intervalQuery = (minutes) => {
         .utc()
         .subtract(minutes, "minutes")
         .format("YYYY-MM-DD HH:mm:ss");
-    return this.makeQuery(`where p.uid = 'yDuAzyqYABS'
-	and (psi.created >= '${end}'
-		or psi.lastupdated >= '${end}'
-	);`);
+    return this.makeQuery(
+        `where p.uid = 'yDuAzyqYABS'and (psi.created >= '${end}' or psi.lastupdated >= '${end}');`
+    );
 };
 
 module.exports.monthlyBacklogQuery = (date) =>
