@@ -89,8 +89,6 @@ module.exports.intervalQuery = (minutes) => {
 	and (
 		tei.created >= '${end}'
 		or tei.lastupdated >= '${end}'
-		or psi.created >= '${end}'
-		or psi.lastupdated >= '${end}'
 	);`);
 };
 
