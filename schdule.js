@@ -6,11 +6,11 @@ const cron = require("node-cron");
 dotenv.config();
 
 const pool = new Pool({
-    user: process.env.PG_USER,
-    password: process.env.PG_PASSWORD,
-    host: process.env.PG_HOST,
-    port: process.env.PG_PORT,
-    database: process.env.PG_DATABASE,
+    user: process.env.PG_USER_LIVE,
+    password: process.env.PG_PASSWORD_LIVE,
+    host: process.env.PG_HOST_LIVE,
+    port: process.env.PG_PORT_LIVE,
+    database: process.env.PG_DATABASE_LIVE,
 });
 
 cron.schedule("*/1 * * * *", async () => {
