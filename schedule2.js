@@ -13,11 +13,11 @@ const pool = new Pool({
     database: process.env.PG_DATABASE_LIVE,
 });
 
-cron.schedule("*/1 * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
     const client = await pool.connect();
     console.log(intervalQuery(1));
     try {
-        const cursor = client.query(new Cursor(intervalQuery(1)));
+        const cursor = client.query(new Cursor(intervalQuery(6)));
         let rows = await cursor.read(batchSize);
         console.log(rows);
         if (rows.length > 0) {
