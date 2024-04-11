@@ -87,8 +87,8 @@ module.exports.intervalQuery = (minutes) => {
         .format("YYYY-MM-DD HH:mm:ss");
     return this.makeQuery(`where p.uid = 'yDuAzyqYABS'
 	and (
-		tei.created >= '${end}'
-		or tei.lastupdated >= '${end}'
+		or psi.created >= '${end}'
+		or psi.lastupdated >= '${end}'
 	);`);
 };
 
