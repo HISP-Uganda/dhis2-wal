@@ -89,6 +89,15 @@ module.exports.intervalQuery = (minutes) => {
         `where p.uid = 'yDuAzyqYABS' and (psi.created >= '${end}' or psi.lastupdated >= '${end}');`
     );
 };
+module.exports.intervalQuery2 = (minutes) => {
+    const end = dayjs()
+        .utc()
+        .subtract(minutes, "minutes")
+        .format("YYYY-MM-DD HH:mm:ss");
+    return this.makeQuery(
+        `where p.uid = 'yDuAzyqYABS' and (tei.created >= '${end}' or tei.lastupdated >= '${end}');`
+    );
+};
 
 module.exports.monthlyBacklogQuery = (date) =>
     this.makeQuery(`where p.uid = 'yDuAzyqYABS'
