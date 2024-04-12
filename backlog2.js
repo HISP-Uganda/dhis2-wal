@@ -63,7 +63,7 @@ const processData = async () => {
                 await processAndInsert2("epivac", rows1);
             }
             while (rows1.length > 0) {
-                rows1 = await cursor.read(batchSize);
+                rows1 = await cursor1.read(batchSize);
                 if (rows1.length > 0) {
                     await processAndInsert2("epivac", rows1);
                 }
