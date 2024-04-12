@@ -3,8 +3,7 @@ const Cursor = require("pg-cursor");
 const {
     processAndInsert2,
     batchSize,
-    intervalQuery,
-    monthlyBacklogQuery,
+    createBacklogQuery,
 } = require("./common.js");
 const dayjs = require("dayjs");
 const dotenv = require("dotenv");
@@ -23,7 +22,12 @@ cron.schedule("*/30 * * * *", async () => {
     const client = await pool.connect();
     try {
         const cursor = client.query(
-            new Cursor(monthlyBacklogQuery(dayjs().format("YYYY-MM")))
+            new Cursor(
+                createBacklogQuery(
+                    dayjs().format("YYYY-MM-DD"),
+                    dayjs().format("YYYY-MM-DD")
+                )
+            )
         );
         let rows = await cursor.read(batchSize);
         if (rows.length > 0) {
