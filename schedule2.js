@@ -1,6 +1,12 @@
 const { Pool } = require("pg");
 const Cursor = require("pg-cursor");
-const { processAndInsert2, batchSize, intervalQuery } = require("./common.js");
+const {
+    processAndInsert2,
+    batchSize,
+    intervalQuery,
+    monthlyBacklogQuery,
+} = require("./common.js");
+const dayjs = require("dayjs");
 const dotenv = require("dotenv");
 const cron = require("node-cron");
 dotenv.config();
@@ -13,10 +19,12 @@ const pool = new Pool({
     database: process.env.PG_DATABASE_LIVE,
 });
 
-cron.schedule("*/1 * * * *", async () => {
+cron.schedule("*/30 * * * *", async () => {
     const client = await pool.connect();
     try {
-        const cursor = client.query(new Cursor(intervalQuery(2)));
+        const cursor = client.query(
+            new Cursor(monthlyBacklogQuery(dayjs().format("YYYY-MM")))
+        );
         let rows = await cursor.read(batchSize);
         if (rows.length > 0) {
             await processAndInsert2("epivac", rows);
