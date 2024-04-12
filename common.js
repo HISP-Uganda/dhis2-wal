@@ -140,6 +140,10 @@ module.exports.createBacklogQuery = (start, end) =>
     this.makeQuery(
         `where p.uid = 'yDuAzyqYABS' and psi.created >= '${start}' and psi.created < '${end}';`
     );
+module.exports.createBacklogQuery2 = (start, end) =>
+    this.makeQuery(
+        `where p.uid = 'yDuAzyqYABS' and tei.created >= '${start}' and tei.created < '${end}';`
+    );
 
 module.exports.queryByNIN = (nin) =>
     this.makeQuery(
