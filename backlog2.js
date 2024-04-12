@@ -5,6 +5,7 @@ const {
     processAndInsert2,
     batchSize,
     createBacklogQuery,
+    createBacklogQuery2,
 } = require("./common.js");
 const dotenv = require("dotenv");
 const { sortBy, orderBy } = require("lodash");
@@ -46,6 +47,28 @@ const processData = async () => {
             ["desc"]
         )) {
             console.log(`Working on ${start}`);
+
+            console.log("Updating by program tracked entity instance");
+            const cursor1 = client.query(
+                new Cursor(
+                    createBacklogQuery2(
+                        dayjs().format("YYYY-MM-DD"),
+                        dayjs().add(1, "days").format("YYYY-MM-DD")
+                    )
+                )
+            );
+            let rows1 = await cursor1.read(batchSize);
+            if (rows1.length > 0) {
+                await processAndInsert2("epivac", rows1);
+            }
+            while (rows1.length > 0) {
+                rows1 = await cursor.read(batchSize);
+                if (rows1.length > 0) {
+                    await processAndInsert2("epivac", rows1);
+                }
+            }
+
+            console.log("Updating by program stage instance");
             const cursor = client.query(
                 new Cursor(createBacklogQuery(start, end))
             );
