@@ -138,7 +138,7 @@ module.exports.processAndInsert = async (index, rows) => {
 
 module.exports.createBacklogQuery = (start, end) =>
     this.makeQuery(
-        `where p.uid = 'yDuAzyqYABS' and ((psi.lastupdated >= '${start}' and psi.lastupdated < '${end}') or (tei.lastupdated >= '${start}' and tei.lastupdated < '${end}'));`
+        `where p.uid = 'yDuAzyqYABS' and tei.lastupdated >= '${start}' and tei.lastupdated < '${end}';`
     );
 module.exports.createBacklogQuery2 = (start, end) =>
     this.makeQuery(
